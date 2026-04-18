@@ -1,0 +1,18 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: rng-seed
+      MYSQL_USER: petpursuit
+      MYSQL_PASSWORD: petpursuit_password
+      MYSQL_DATABASE: PetPursuit
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./create.sql:/home/create.sql
+volumes:
+  mysql_data:
+    name: mysql_data
