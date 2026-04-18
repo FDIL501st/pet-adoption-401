@@ -6,7 +6,7 @@ The vercel deployment doesn't work as the database it was connected to no longer
 
 ### MySQL server
 You will need a running MySQL server. This can simply be on the same computer, like using docker.
-Inside src/sql, there is a compose.yaml that you can use to get a server started with docker compose.
+Inside `src/db/sql`, there is a compose.yaml that you can use to get a server started with docker compose.
 
 Then you will need to initialize the MySQL server. 
 
