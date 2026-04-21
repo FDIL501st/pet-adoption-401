@@ -1,28 +1,29 @@
-"use server"
-
-import {getSession, updateSession} from "./lib";
+import {getSession, getSessionFromRequest, updateSession} from "./lib";
+import { NextResponse } from "next/server";
 
 export async function middleware(request) {
 	const pathname = request.nextUrl.pathname
 
-	const session = await getSession()
+	const session = await getSessionFromRequest(request)
 
 	// redirect in case of attempt to BookAppointment without being logged in
 	if (!session && pathname.startsWith('/BookAppointment')) {
 
 		// redirect to login page
-		return Response.redirect(new URL('/login', request.url))
+		return NextResponse.redirect(new URL("/login", request.nextUrl));
 	}
 
 	if (!session && pathname.startsWith('/BrowseAppointments')) {
 		// redirect to login page
-		return Response.redirect(new URL('/login', request.url))
+		return NextResponse.redirect(new URL("/login", request.nextUrl));
 	}
 
 	// refresh cookie expiry when don't get redirected (means session was not null)
 	// put this down here and not at top to allow future changes of user type to also be adding to checking
 	if (session)
 		return await updateSession(request);
+
+	// case if not signed in, but not accessing protected route, so just continue
 }
 
 export const config = {

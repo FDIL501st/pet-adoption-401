@@ -1,4 +1,4 @@
-"use server"
+'use server'
 
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
@@ -32,16 +32,24 @@ export async function createCookie(userID, userEmail) {
 	const session = await encrypt({ user, expires });
 
 	// Save the session in a cookie
-	cookies().set("session", session, { expires, httpOnly: true });
+	await cookies().set("session", session, { expires, httpOnly: true });
 }
 
 export async function deleteSession() {
 	// Destroy the session
-	cookies().delete('session');
+	await cookies().delete('session');
 }
 
 export async function getSession() {
 	const session = cookies().get("session")?.value;
+	if (!session) return null;
+	return await decrypt(session);
+}
+
+export async function getSessionFromRequest(request) {
+	// called by middleware to refresh cookie expiry on each request,
+	// so can't use cookies from next/headers and have to manually get cookie from request header
+	const session = request.cookies.get("session")?.value;
 	if (!session) return null;
 	return await decrypt(session);
 }
@@ -51,12 +59,15 @@ export async function getSessionUserID() {
 	// return invalid ID if no session cookie found
 	if (!parsed) return -1
 
-	const {userID, userEmail} = parsed.user
+	const {userID, _} = parsed.user
 
 	return parseInt(String(userID), 10)
 }
 
 export async function updateSession(request) {
+	// called by middleware to refresh cookie expiry on each request, 
+	// so can't use cookies from next/headers and have to manually get cookie from request header
+
 	const session = request.cookies.get("session")?.value;
 	if (!session) return;
 

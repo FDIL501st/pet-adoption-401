@@ -44,9 +44,17 @@ async function getClientID(accountID) {
 export async function removeAppointment(appointment_id) {
     try {
         // Query the database to remove the appointment with the given ID
-        const response = await query("DELETE FROM Appointment WHERE appointment_id = ?", [appointment_id]);
-        // Return the response
-        return response;
+        const response = await query(`DELETE FROM Appointment WHERE appointment_id = ?`, [appointment_id]);
+        console.log("Database response for deletion:", response);
+        if (response.affectedRows === 1) {
+            console.log(`Appointment with ID ${appointment_id} deleted successfully.`);
+            return true; // Indicate successful deletion
+        } else {
+            console.log(`No appointment found with ID ${appointment_id}.`);
+            return false; // Indicate that no appointment was deleted
+        }
+        // can't return response to controller as can't send full js object back, 
+        // so just return true/false for success/failure and handle rest in controller
     } catch (error) {
         console.error("Error removing appointment:", error);
     }

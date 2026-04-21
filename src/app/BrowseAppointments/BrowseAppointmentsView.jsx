@@ -1,18 +1,10 @@
 import React from "react";
 import Navbar from "@components/Navbar";
 import Background from "@components/Background";
-import { removeAppointment } from "./BrowseAppointmentsAPI";
 
 
-const BrowseAppointments = ({ appointments}) => {
-    // Function to handle deletion of an appointment
-    const handleDelete = (appointmentId) => {
-        // Implement deletion logic here
-        removeAppointment(appointmentId);
-        // console.log("Deleting appointment with ID:", appointmentId);
-        window.location.reload();
-    };
 
+const BrowseAppointments = ({ appointments, handleDelete }) => {
 
     // some odd reason in deployment end up displaying 1 date before
     function correctDate(date) {
