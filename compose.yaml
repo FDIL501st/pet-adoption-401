@@ -1,0 +1,35 @@
+services:
+  pet-adoption-nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pet-adoption-nextjs
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      SECRET_KEY: ${SECRET_KEY}
+      DB_HOST: mysql
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: rng-seed
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./src/db/sql/create.sql:/docker-entrypoint-initdb.d/create.sql
+volumes:
+  mysql_data:
+    name: mysql_data
