@@ -22,8 +22,6 @@ open [http://localhost:3000](http://localhost:3000) with your browser.
 You will need a running MySQL server. This can simply be on the same computer, like using docker.
 Inside `src/db/sql`, there is a compose.yaml that you can use to get a server started with docker compose.
 
-Then you will need to initialize the MySQL server. 
-
 First make a `.env` file. You can copy `example.env` as a starting point.
 It will work fine unmodified if you used the compse.yaml file to run the MySQL server.
 
